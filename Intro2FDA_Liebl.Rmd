@@ -369,9 +369,11 @@ $$R_i(t):=\log(P_i(t))-\log(P_i(0))\approx\frac{P_i(t)-P_i(0)}{P_i(0)}$$
 
 ## Case Study: BOA Stock Returns
 
-```{r, echo=TRUE, eval=TRUE}
+```{r, echo=FALSE, eval=TRUE}
 # Data
-BOA        <- read.csv(file = "https://raw.githubusercontent.com/lidom/Teaching_Repo/master/stock_prices.csv",
+# BOA        <- read.csv(file = "https://raw.githubusercontent.com/lidom/Teaching_Repo/master/stock_prices.csv",
+#                        header = TRUE, sep = " ", dec = ",")
+BOA        <- read.csv(file = "stock_prices.csv",
                        header = TRUE, sep = " ", dec = ",")
 Dates      <- BOA$date
 BOA        <- BOA[,-1]
@@ -391,8 +393,6 @@ bspl_basis <- create.bspline.basis(rangeval=c(0,6.5),nord=4,nb=200)
 log_BOA_fd <- Data2fd(Times,t(log_BOA),basisobj = bspl_basis)
 ```
 
-
-## Case Study: BOA Stock Returns
 ```{r, eval=FALSE, echo=TRUE}
 # Plot functional data
 plot(log_BOA_fd, xlab="Trading Hours",ylab="",lwd=1, col=gray(.5), 
