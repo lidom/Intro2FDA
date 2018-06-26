@@ -373,7 +373,8 @@ $$R_i(t):=\log(P_i(t))-\log(P_i(0))\approx\frac{P_i(t)-P_i(0)}{P_i(0)}$$
 # Data
 BOA        <- read.csv(file = "https://raw.githubusercontent.com/lidom/Teaching_Repo/master/stock_prices.csv",
                        header = TRUE, sep = " ", dec = ",")
-Dates      <- dimnames(BOA)[[1]]
+Dates      <- BOA$date
+BOA        <- BOA[,-1]
 BOA        <- data.matrix(BOA)
 BOA        <- BOA[-which(Dates=="08/26/2004"),]# Outlier
 n          <- dim(BOA)[1]
