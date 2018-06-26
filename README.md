@@ -1,6 +1,6 @@
 # Introduction to Functional Data Analysis
 
-This repository contains the HTML-slides of my short lecture **Introduction to Functional Data Analysis** at the *2nd Workshop on Statistics & Econometrics*, Jul. 13, 2018, University of Passau (Germany).
+This repository contains the HTML-slides `Intro2FDA.html` of my short lecture **Introduction to Functional Data Analysis** at the *2nd Workshop on Statistics & Econometrics*, Jul. 13, 2018, University of Passau (Germany).
 
 All practical examples can be reproduced using the accompanying R-codes.
 
