@@ -18,7 +18,7 @@ data(growth)
 
 ## How to Use these Slides
 
-Accampaning Book: 
+Accompanying Textbook: 
 ```{r, fig.height=4, fig.align='center'}
 library("png")
 library("grid")
@@ -34,7 +34,7 @@ Covered Chapters: Ch. 1 (1.1-1.4), Ch. ???
 All examples are reproducable using the R-codes published at my GitHub account:
 <br><br>
 <div class="centered">
-<bdi style="font-size:150%;"><b>https://github.com/lidom/</b></bdi>
+<bdi style="font-size:150%;"><b>https://github.com/lidom/Intro2FDA</b></bdi>
 </div>
 
 
