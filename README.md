@@ -14,7 +14,7 @@ Covered Chapters:
 
  - Chapter 1 First steps in the analysis of functional data (Sections 1.1-1.4)
  - Chapter 3 Mathematical framework for functional data (Sections 3.1 and 3.2)
- - Chapter 4 Scalar–on–function regression (Sections 1.1)
+ - Chapter 4 Scalar-on-function regression (Sections 1.1)
 
 
 
