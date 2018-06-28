@@ -22,8 +22,8 @@ Accompanying Textbook:
 ```{r, fig.height=4, fig.align='center'}
 library("png")
 library("grid")
-FDA_Book_Pic <- readPNG("./images/IntroFDA_Book.png")
-grid.raster(FDA_Book_Pic)
+FDA_Book_Pic <- png::readPNG("./images/IntroFDA_Book.png")
+grid::grid.raster(FDA_Book_Pic)
 ```
 
 Covered Chapters: Ch. 1 (1.1-1.4), Ch. ??? 
