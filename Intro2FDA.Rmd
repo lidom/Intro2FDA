@@ -440,15 +440,12 @@ matplot(x = xx, y=EFWP_mat, type="l",  main="True Eigenfunctions of\nWiener Proc
 
 
 ##
-<br><br>
+<br><br><br>
 <div class="centered">
 <div class="red2">
-<bdi style="font-size:300%;">
-<b>Mathematical Framework:<br></b>
-</bdi>
-<div class="blue">
-<bdi style="font-size:300%;">
-<b>Square Integrable Functions</b>
+<bdi style="font-size:290%;">
+<b>Mathematical Framework:<br>
+<em>Square Integrable Functions</em></b>
 </bdi>
 </div>
 </div>
@@ -502,15 +499,12 @@ $$
 
 
 ##
-<br><br>
+<br><br><br>
 <div class="centered">
 <div class="red2">
-<bdi style="font-size:300%;">
-<b>Mathematical Framework:<br></b>
-</bdi>
-<div class="blue">
-<bdi style="font-size:300%;">
-<b>Random Functions</b>
+<bdi style="font-size:290%;">
+<b>Mathematical Framework:<br>
+<em>Random Functions</em></b>
 </bdi>
 </div>
 </div>
@@ -576,6 +570,37 @@ $$
 and $E\int_a^b(X(t)-\mu(t))^2dt=E||X-\mu||^2=\sum_{j=1}^\infty\lambda_j$.
 
 That is, $\lambda_j$ is the variance of the random function $X$ **in the principal direction** $v_j$ and the sum of these variances is the **total variance** of $X$. 
+
+
+##
+<br><br><br>
+<div class="red2">
+<div class="centered">
+<bdi style="font-size:350%;"><b>Functional Regression Models</b>
+</bdi>
+</div>
+</div>
+
+
+## Functional Regression Models
+
+**Scalar–on–function regression:**
+$$Y_i=\int_a^b\beta(s)X_i(s)ds+\varepsilon_i$$
+**Function–on-scalar regression:**
+$$Y_i(t)=\sum_{k=1}^p\beta_k(t)x_{ik}+\varepsilon_i(t)$$
+**Function–on-function regression:**
+$$Y_i(t)=\int_a^b\beta(t,s)X_{i}(s)ds+\varepsilon_i(t)$$
+
+
+## Functional Regression Models
+
+**Nonparametric scalar–on–function regression:**
+$$Y_i=m(X_i)+\varepsilon_i,\quad Y_i\in\mathbb{R},\; X_i\in L^2([a,b])$$
+**Nonparametric function–on–function regression:**
+$$Y_i=m(X_i)+\varepsilon_i,\quad Y_i,\,X_i\in L^2([a,b])$$
+The above models are just prototypes illustrating the general idea. The main point is that the functional regression models are **infinite dimensional objects** which must be estimated from a **finite sample**.
+
+
 
 
 
