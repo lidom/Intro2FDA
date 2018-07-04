@@ -1,10 +1,12 @@
 ---
-title: "Introduction to Functional Data Analysis"
+title: "A Gentle Introduction to Functional Data Analysis"
 author: "Dominik Liebl"
 date: "13 Juli 2018"
 output:
   ioslides_presentation: default
   slidy_presentation: default
+  widescreen: true
+  smaller: true
 ---
 
 ```{r setup, include=FALSE}
@@ -19,6 +21,7 @@ data(growth)
 ## How to Use these Slides
 
 Accompanying Textbook: 
+<br><br>
 ```{r, fig.height=4, fig.align='center'}
 library("png")
 library("grid")
@@ -26,12 +29,12 @@ FDA_Book_Pic <- png::readPNG("./images/IntroFDA_Book.png")
 grid::grid.raster(FDA_Book_Pic)
 ```
 
-Covered Chapters: Ch. 1 (1.1-1.4), Ch. ??? 
+<!-- Covered Chapters: Ch. 1 (1.1-1.4), Ch. ???  -->
 
 
 ## How to Use these Slides
 
-All examples are reproducable using the R-codes published at my GitHub account:
+The **HTML-slides** of this short lecture and the **R-codes** for reproducing the examples can be found at my GitHub repository **Intro2FDA**:
 <br><br>
 <div class="centered">
 <bdi style="font-size:150%;"><b>https://github.com/lidom/Intro2FDA</b></bdi>
@@ -82,26 +85,26 @@ knitr::include_graphics("./images/Fig_PM10_2.png")
 
 ## From Raw to Functional Data
 
-The simplest data set encountered in functional data analysis is a sample of the form:
+The simplest <span style="color:#FF4136">**data**</span> set encountered in functional data analysis is a sample of the form:
 $$
 \begin{align}
 x_i(t_j),\quad t_j\in[a,b],\quad i=1,\dots,n \quad j=1\dots,J.
 \end{align}
 $$
-The (theoretical) objects we wish to study are smooth curves:
+The <span style="color:#FF4136">**theoretical objects**</span> we wish to study are smooth curves:
 $$
 \begin{align}
 X_i(t),\quad t\in[a,b],\quad i=1,\dots,n \quad j=1\dots,J.
 \end{align}
 $$
 ```{r, fig.width=8, fig.height=3, fig.align='center'}
-par(mfrow=c(1,2), mar=c(5.1, 4.1, 0, 2.1))
+par(mfrow=c(1,2), mar=c(5.1, 4.1, 2.1, 2.1))
 matplot(x=growth$age, y=growth$hgtf[,1:5], type="p", lty=1, pch=21, 
         xlab="age", ylab="height (cm)", cex.lab=1.2,col=1:5,bg=1:5,
-        main="")
+        main=expression(x[i](t[j])))
 matplot(x=growth$age, y=growth$hgtf[,1:5], type="l", lty=1, pch=1, 
         xlab="age", ylab="height (cm)", cex.lab=1.2,
-        main="")
+        main=expression(X[i](t)))
 par(mfrow=c(1,1), mar=c(5.1, 4.1, 4.1, 2.1))
 ```
 
@@ -111,7 +114,7 @@ par(mfrow=c(1,1), mar=c(5.1, 4.1, 4.1, 2.1))
 **Basis expansions:**
 
 Typically, the first step in working with functional data is
-to express them by means of a basis expansion
+to express them by means of a <span style="color:#FF4136">**basis expansion**</span>
 $$
 X_i(t)\approx\sum_{m=1}^M c_{im} B_m(t),\quad t\in[a,b],
 $$
@@ -125,7 +128,7 @@ where $B_1(t),\dots,B_M(t)$ are some standard collection of basis functions like
 
 ## From Raw to Functional Data
 
-B-spline basis functions $B_1(t),\dots,B_M(t)$:
+<span style="color:#FF4136">**B-spline**</span> basis functions $B_1(t),\dots,B_M(t)$:
 
 ```{r, echo=TRUE, out.width = "80%", fig.align='center'}
 bspl_bf <- create.bspline.basis(rangeval=c(0,1), norder=3, 
@@ -136,7 +139,7 @@ plot(bspl_bf, main="B-spline Basis Functions", xlab="[a,b]=[0,1]")
 
 ## From Raw to Functional Data
 
-Fourier basis functions $B_1(t),\dots,B_M(t)$:
+<span style="color:#FF4136">**Fourier basis**</span> functions $B_1(t),\dots,B_M(t)$:
 
 ```{r, echo=TRUE, out.width = "80%", fig.align='center'}
 fourier_bf <- create.fourier.basis(rangeval=c(0,1), nbasis=5)
@@ -146,7 +149,7 @@ plot(fourier_bf, main="Fourier Basis Functions", xlab="[a,b]=[0,1]")
 
 ## From Raw to Functional Data
 
-**Example:** Raw data
+<span style="color:#FF4136">**Example:**</span>  Raw data
 ```{r, fig.align='center', out.width = "80%", echo=TRUE}
 matplot(x=growth$age, y=growth$hgtf[,1:5], type="p", lty=1, pch=21, 
         xlab="age", ylab="height (cm)", cex.lab=1.2,col=1:5,bg=1:5,
@@ -156,7 +159,7 @@ matplot(x=growth$age, y=growth$hgtf[,1:5], type="p", lty=1, pch=21,
 
 ## From Raw to Functional Data
 
-**Example:** Pre-processed data
+<span style="color:#FF4136">**Example:**</span>  Pre-processed data
 ```{r, fig.align='center', out.width = "80%", echo=TRUE}
 SmObj <- smooth.basisPar(growth$age,y=growth$hgtf[,1:5],lam=0.1)
 plot(SmObj$fd, xlab="age", ylab="height (cm)", cex.lab=1.2,
@@ -166,7 +169,7 @@ plot(SmObj$fd, xlab="age", ylab="height (cm)", cex.lab=1.2,
 
 ## From Raw to Functional Data
 
-**Example:** Pre-processed data - 1st derivative
+<span style="color:#FF4136">**Example:**</span>  Pre-processed data - 1st derivative
 ```{r, fig.align='center', out.width = "80%", echo=TRUE}
 plot(deriv(SmObj$fd, 1), xlab="age", 
      ylab="growth rate (cm / year)", cex.lab=1.2,
@@ -176,7 +179,7 @@ plot(deriv(SmObj$fd, 1), xlab="age",
 
 ## From Raw to Functional Data
 
-**Example:** Pre-processed data - 2nd derivative
+<span style="color:#FF4136">**Example:**</span>  Pre-processed data - 2nd derivative
 ```{r, fig.align='center', out.width = "80%", echo=TRUE}
 plot(deriv(SmObj$fd, 2), xlab="age", cex.lab=1.2,
      ylab="growth acceleration (cm / year^2)",
@@ -194,9 +197,10 @@ plot(deriv(SmObj$fd, 2), xlab="age", cex.lab=1.2,
 
 ## Sample Mean and Covariance
 
+<!-- <span style="color:#FF4136">**Pointwise mean:**</span>  -->
 **Pointwise mean:**
 $$
-\hat{\mu}_n(t)=\bar{X}_n(t)=\frac{1}{n}\sum_{i=1}^n X_i(t)
+\bar{X}_n(t)=\frac{1}{n}\sum_{i=1}^n X_i(t)
 $$
 **Pointwise standard deviation:**
 $$
@@ -293,6 +297,7 @@ $$\textstyle\int_a^b\hat{v}_j(t)\hat{v}_k(t)dt=\begin{cases}1, &j=k\\0,&j\neq k.
 
 ## Principal Component Functions 
 
+Eigendecomposition of $\hat{c}_n(t,s)$: 
 $$
 \begin{align}
 \hat{c}_n(t,s)&\approx\sum_{j=1}^p\hat{\lambda}_j\hat{v}_j(t)\hat{v}_j(s),
@@ -300,7 +305,7 @@ $$
 $$
 where $\hat{\lambda}_1>\dots >\hat{\lambda}_p$ denote the estimated eigenvalues.
 ```{r echo=FALSE, fig.align='center', fig.height=3}
-BSPL.basis <- create.bspline.basis(rangeval=c(0,1), nbasis=100)
+BSPL.basis <- create.bspline.basis(rangeval=c(0,1), nbasis=200)
 Wiener.fd  <- smooth.basis(argvals=xx, y=Wiener.mat, fdParobj=BSPL.basis)
 # Wiener.pca <- pca.fd(Wiener.fd$fd, nharm=4)
 # round(Wiener.pca$varprop,2)
@@ -339,6 +344,7 @@ X_fpca_fit <- Wiener.Mean + (xi_hat_mat %*% t(v_hat_mat))
 par(mfrow=c(1,1), mar=c(5.1, 4.1, 2.1, 2.1))
 invisible(plot(Wiener.fd$fd[1], lwd=1.3, main="Approximation of Brownian Motion (p=15)"))
 lines(y=X_fpca_fit[1,], x=xx, col="red", lwd=1.3)
+legend("topright", lty = c(1,1), col=c("black","red"), legend = c("True","Approx"))
 ```
 
 
@@ -444,56 +450,53 @@ matplot(x = xx, y=EFWP_mat, type="l",  main="True Eigenfunctions of\nWiener Proc
 <div class="centered">
 <div class="red2">
 <bdi style="font-size:290%;">
-<b>Mathematical Framework:<br>
-<em>Square Integrable Functions</em></b>
+<b>Mathematical Framework:<br>1. Square Integrable Functions</b>
 </bdi>
 </div>
 </div>
 
-
-##  Square Integrable Functions
+## Square Integrable Functions
 
 <!-- - Let's consider standardized intervals $[a,b]=[0,1]$.<br> -->
 <!--   Standardization: $t^{\text{new}}=(t^{\text{old}}-a)/(b-a)$. -->
 
-- A function $f$ is said to be **square integrable**, i.e., $f\in L^2([a,b])$ if
+- A function $f$ is said to be <span style="color:#FF4136">**square integrable**</span>, i.e., $f\in L^2([a,b])$ if
 $$
-\textstyle\int_a^b f^2(t)dt=\int_a^b \big(f(t)\big)^2 dt<\infty.
+\textstyle\int_a^b \big(f(t)\big)^2 dt<\infty.
 $$
-- Square integrable functions form a **vector space**, i.e., for $c,d\in\mathbb{R}$: 
+- Square integrable functions form a <span style="color:#FF4136">**vector space**</span>, i.e., for $c,d\in\mathbb{R}$: 
 $$g,f\in L^2([a,b])\quad\Rightarrow\quad cf+dg\in L^2([a,b]),$$ 
 where <br>
 $(cf+dg)(t)=cf(t)+dg(t)$ for *almost all* $t\in[0,1]$. 
 <br><br>
-(Note: We will ignore measure-theoretic considerations.)
+(We will ignore measure-theoretic considerations.)
 
 
-##  Square Integrable Functions
-
+##  Square Integrable Functions 
 
 What makes the space $L^2([a,b])$ so convenient is its structure:
 
-- **Inner product** of two functions by
+- <span style="color:#FF4136">**Inner product**</span> of two functions by
 $$
 \textstyle\langle f,g\rangle=\int_a^bf(t)g(t)dt.
 $$
--  Two functions $f$ and $g$ are **orthogonal** if 
+-  Two functions $f$ and $g$ are <span style="color:#FF4136">**orthogonal**</span> if 
 $$\langle f,g\rangle=0.$$
 
-- The **norm** $||f||=\sqrt{\langle f,f\rangle}$, gives us a notion for the distance between two functions: $$d(f,g)=||f-g||$$
+- The <span style="color:#FF4136">**norm**</span> $||f||=\sqrt{\langle f,f\rangle}$, gives us a notion for the distance between two functions: $$d(f,g)=||f-g||$$
 
 
-##  Square Integrable Functions
+##  Square Integrable Functions 
 
 As we have already seen, basis expansions play an important role in
 methodology for functional data. 
 
 - We say that a set of functions $\{e_1 ,e_2,e_3,\dots\}$
-is a **basis** in $L^2([a,b])$ if every function $f\in L^2([a,b])$ admits a *unique* expansion
+is a <span style="color:#FF4136">**basis**</span> in $L^2([a,b])$ if every function $f\in L^2([a,b])$ admits a *unique* expansion
 $$
 \textstyle f(t)=\sum_{j=1}^\infty a_j e_j(t)
 $$
-- We say that $\{e_1 ,e_2,e_3,\dots\}$ is an **orthonormal basis** if, in addition
+- We say that $\{e_1 ,e_2,e_3,\dots\}$ is an <span style="color:#FF4136">**orthonormal basis**</span> if, in addition
 $$\langle e_j , e_k\rangle=\begin{cases}1, &j=k\\0&j\neq k.\end{cases}
 $$ 
 
@@ -503,8 +506,7 @@ $$
 <div class="centered">
 <div class="red2">
 <bdi style="font-size:290%;">
-<b>Mathematical Framework:<br>
-<em>Random Functions</em></b>
+<b>Mathematical Framework:<br>2. Random Functions</b>
 </bdi>
 </div>
 </div>
@@ -512,7 +514,7 @@ $$
 
 ## Random Functions
 
-Let $X$ denote a **random function** defined on a probability space, say
+Let $X$ denote a <span style="color:#FF4136">**random function**</span> defined on a probability space, say
 $\Omega$.
 
 
@@ -521,7 +523,7 @@ $||X(\omega)||=\sqrt{\int_a^b \big(X(\omega)(t)\big)^2dt} < \infty$ for all $\om
 
 - $||X||\in\mathbb{R}$ is thus a real random variable. 
 
-- If $E(||X||^2)<\infty$, we say that the **random function $X$ is square integrable**. 
+- If $E(||X||^2)<\infty$, we say that the <span style="color:#FF4136">**random function $X$ is square integrable**</span>. 
 **Caution:** Integration is here with respect to $\omega$, not $t$. It might be more pedagogical to say that the **random function $X$ has a finite second moment**. 
 
 
@@ -535,7 +537,7 @@ $$
 $$
 c(t,s)=E\Big((X(t)-\mu(t))(X(s)-\mu(s))\Big)
 $$
-The sample functions $\hat{\mu}_n$ and $\hat{c}_n$ are viewed as estimators of the population parameters $\mu$ and $c$.
+The sample functions $\hat{\mu}_n(t)=\bar{X}_n(t)$ and $\hat{c}_n(t,s)$ are viewed as estimators of the population parameters $\mu(t)$ and $c(t,s)$.
 
 
 ## Random Functions 
@@ -565,7 +567,7 @@ $$
 
 It can be shown that:
 $$
-E(\xi_j)=0,\; V(\xi_j)=E(\xi_j^2)=\lambda_j, \; \operatorname{Cov}(\xi_j,\xi_k)=0,\,j\neq k,
+E(\xi_j)=0,\quad V(\xi_j)=\lambda_j,\quad \operatorname{Cov}(\xi_j,\xi_k)=0,\,j\neq k,
 $$
 and $E\int_a^b(X(t)-\mu(t))^2dt=E||X-\mu||^2=\sum_{j=1}^\infty\lambda_j$.
 
@@ -595,12 +597,116 @@ $$Y_i(t)=\int_a^b\beta(t,s)X_{i}(s)ds+\varepsilon_i(t)$$
 ## Functional Regression Models
 
 **Nonparametric scalar–on–function regression:**
-$$Y_i=m(X_i)+\varepsilon_i,\quad Y_i\in\mathbb{R},\; X_i\in L^2([a,b])$$
+$$Y_i=m(X_i)+\varepsilon_i,$$
+where $Y_i\in\mathbb{R}$ and $X_i\in L^2([a,b])$.
+
 **Nonparametric function–on–function regression:**
-$$Y_i=m(X_i)+\varepsilon_i,\quad Y_i,\,X_i\in L^2([a,b])$$
+$$Y_i=m(X_i)+\varepsilon_i,$$
+where $Y_i,\,X_i\in L^2([a,b])$.
+
 The above models are just prototypes illustrating the general idea. The main point is that the functional regression models are **infinite dimensional objects** which must be estimated from a **finite sample**.
 
 
+
+##
+<br><br><br>
+<div class="red2">
+<div class="centered">
+<bdi style="font-size:350%;"><b>Difficulties in Functional Regression</b>
+</bdi>
+</div>
+</div>
+
+
+## Difficulties in Functional Regression
+
+**Remember: The usual regression model**
+$$
+\textstyle Y_i=\sum_{r=1}^p\beta_rX_r+\varepsilon
+$$
+<!-- The vector of slope parameters $\boldsymbol{\beta}=(\beta_1,\dots,\beta_p)$ minimizes -->
+<!-- $$ -->
+<!-- \textstyle R(\boldsymbol{\beta})=E(Y-\sum_{r=1}^p\beta_rX_r)^2. -->
+<!-- $$ -->
+<!-- Equating the partial derivatives $\partial R(\boldsymbol{\beta})/\partial\beta_\ell$ to zero for $\ell=1,\dots,p$ leads to the solution -->
+**Normal equations and solution (population):**
+$$
+\textstyle \mathbf{C}_{XY}=\mathbf{C}_{XX}\boldsymbol{\beta}\quad\Rightarrow\quad  \boldsymbol{\beta}=\mathbf{C}_{XX}^{-1}\mathbf{C}_{XY},
+$$
+where<br>
+$\mathbf{C}_{XX}=[E(X_rX_\ell),\,1\leq r,\ell\leq p]$ and $\mathbf{C}_{XY}=[E(X_rY),\,1\leq r\leq p]$.
+
+
+## Difficulties in Functional Regression
+
+**Remember: The usual regression model**
+
+<!-- **Solution (population):** -->
+<!-- $$ -->
+<!-- \textstyle \boldsymbol{\beta}=\mathbf{C}_X^{-1}\mathbf{C}_{XY}. -->
+<!-- $$ -->
+**Normal equations and solution (sample):**
+$$
+\textstyle \widehat{\mathbf{C}}_{XY}=\widehat{\mathbf{C}}_{XX}\widehat{\boldsymbol{\beta}}_n\quad\Rightarrow\quad
+\widehat{\boldsymbol{\beta}}_n=\widehat{\mathbf{C}}_{XX}^{-1}\widehat{\mathbf{C}}_{XY},
+$$
+where <br>
+$\big[\widehat{\mathbf{C}}_{XX}\big]_{r,\ell}=\frac{1}{n}\sum_{i=1}^n X_{ir}X_{i\ell}$ and $\big[\widehat{\mathbf{C}}_{XY}\big]_r=\frac{1}{n}\sum_{i=1}^n X_{ir}Y_{i}$.
+
+To obtain $\boldsymbol{\beta}$ and $\widehat{\boldsymbol{\beta}}_n$, we need <span style="color:#FF4136">**invertibility**</span> of the $p\times p$ matrices $\mathbf{C}_{XX}$ and $\widehat{\mathbf{C}}_{XX}$. 
+
+
+## Difficulties in Functional Regression 
+
+**Functional regression**
+$$
+\textstyle Y_i=\int_a^b\beta(t)X_i(t)+\varepsilon_i
+$$
+**Normal equations (population/sample):**
+$$
+\textstyle c_{XY}(t)=\int_a^b c_{XX}(t,s)\beta(s)ds
+$$
+$$
+\textstyle \hat{c}_{XY}(t)=\int_a^b \hat{c}_{XX}(t,s)\beta(s)ds
+$$
+where: <br> 
+$c_{XX}(t,s)=E(X(t)X(s))$<br> 
+$c_{XY}(t)=E(X(t)Y)$<br> 
+$\hat{c}_{XX}(t,s)=\frac{1}{n}\sum_{i=1}^n(X_i(t)X_i(s))$<br>
+$\hat{c}_{XY}(t)=\frac{1}{n}\sum_{i=1}^n(X_i(t)Y_i)$
+
+
+## Difficulties in Functional Regression 
+
+**Functional regression**
+$$
+\textstyle Y_i=\int_a^b\beta(t)X_i(t)+\varepsilon_i
+$$
+**Normal equations (sample):**
+<!-- $$ -->
+<!-- \textstyle c_{XY}(t)=\int_a^b c_{XX}(t,s)\beta(s)ds -->
+<!-- $$ -->
+$$
+\textstyle \hat{c}_{XY}(t)=\int_a^b \hat{c}_{XX}(t,s)\beta(s)ds
+$$
+
+Problem:
+
+- Inverting ... is problematic
+
+**Classical solutions:** Ridge regression and principal component regression
+
+
+<!-- **Functional regression** -->
+<!-- $$ -->
+<!-- \begin{align} -->
+<!-- Y_i&=\int_a^b\beta(t)X_i(t)+\varepsilon_i\\ -->
+<!-- Y_i&\approx\sum_{j=1}^J\beta_jX_i(t_j)+\varepsilon_i\\ -->
+<!-- \end{align} -->
+<!-- $$ -->
+
+<!-- <span style="color:#FF4136">**Problem:**</span> Nearly linearly dependent regressors (*colinearity*), due to very strong correlations between $X_i(t_j)$ and $X_i(t_{j'})$:  -->
+<!-- $$\text{cor}(X_t(t_j),X_t(t_{j'}))\to 1\quad\text{as}\quad|t_j-t_{j'}|\to 0$$ -->
 
 
 
