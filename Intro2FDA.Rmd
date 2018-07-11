@@ -42,7 +42,7 @@ The **HTML-slides** of this short lecture and the **R-codes** for reproducing th
 
 
 ##
-<br><br><br><br><br><br><br>
+<br><br><br><br><br>
 <div class="red2">
 <div class="centered">
 <bdi style="font-size:350%;"><b>Functional Data</b></bdi>
@@ -149,7 +149,7 @@ plot(fourier_bf, main="Fourier Basis Functions", xlab="[a,b]=[0,1]")
 
 ## From Raw to Functional Data
 
-<span style="color:#FF4136">**Example:**</span>  Raw data
+<span style="color:#FF4136">**Example:**</span>  Berkeley growth study **raw data**
 ```{r, fig.align='center', out.width = "80%", echo=TRUE}
 matplot(x=growth$age, y=growth$hgtf[,1:5], type="p", lty=1, pch=21, 
         xlab="age", ylab="height (cm)", cex.lab=1.2,col=1:5,bg=1:5,
@@ -159,7 +159,7 @@ matplot(x=growth$age, y=growth$hgtf[,1:5], type="p", lty=1, pch=21,
 
 ## From Raw to Functional Data
 
-<span style="color:#FF4136">**Example:**</span>  Pre-processed data
+<span style="color:#FF4136">**Example:**</span>  Berkeley growth study **pre-processed data**
 ```{r, fig.align='center', out.width = "80%", echo=TRUE}
 SmObj <- smooth.basisPar(growth$age,y=growth$hgtf[,1:5],lam=0.1)
 plot(SmObj$fd, xlab="age", ylab="height (cm)", cex.lab=1.2,
@@ -169,7 +169,7 @@ plot(SmObj$fd, xlab="age", ylab="height (cm)", cex.lab=1.2,
 
 ## From Raw to Functional Data
 
-<span style="color:#FF4136">**Example:**</span>  Pre-processed data - 1st derivative
+<span style="color:#FF4136">**Example:**</span>  Berkeley growth study **1st derivative**
 ```{r, fig.align='center', out.width = "80%", echo=TRUE}
 plot(deriv(SmObj$fd, 1), xlab="age", 
      ylab="growth rate (cm / year)", cex.lab=1.2,
@@ -179,7 +179,7 @@ plot(deriv(SmObj$fd, 1), xlab="age",
 
 ## From Raw to Functional Data
 
-<span style="color:#FF4136">**Example:**</span>  Pre-processed data - 2nd derivative
+<span style="color:#FF4136">**Example:**</span>   Berkeley growth study **2nd derivative**
 ```{r, fig.align='center', out.width = "80%", echo=TRUE}
 plot(deriv(SmObj$fd, 2), xlab="age", cex.lab=1.2,
      ylab="growth acceleration (cm / year^2)",
@@ -212,25 +212,25 @@ $$
 **Pointwise mean and standard deviation:**
 
 ```{r, eval=FALSE, echo=TRUE}
-Wiener.Mean <- rowMeans(Wiener.mat)
-Wiener.SD   <- apply(Wiener.mat, 1, sd)
+BM.Mean <- rowMeans(BM.mat)
+BM.SD   <- apply(BM.mat, 1, sd)
 ```
 
 ```{r, echo=FALSE, fig.align='center', fig.width=8, fig.height=4}
 set.seed(109)
-n           <- 50
-J           <- 500
-Wiener.mat  <- matrix(0, ncol=n, nrow=J)
-for(i in 1:n){Wiener.mat[,i] <- cumsum(rnorm(J, sd = 1/100))}
-Wiener.Mean <- rowMeans(Wiener.mat)
-Wiener.SD   <- apply(Wiener.mat,1,sd)
+n       <- 50
+J       <- 500
+BM.mat  <- matrix(0, ncol=n, nrow=J)
+for(i in 1:n){BM.mat[,i] <- cumsum(rnorm(J, sd = 1/100))}
+BM.Mean <- rowMeans(BM.mat)
+BM.SD   <- apply(BM.mat,1,sd)
 xx          <- seq(0,1,len=J) 
 par(mfrow=c(1,2))
-matplot(x=xx, y=Wiener.mat, xlab="", ylab="", type="l", col=gray(.7), lty=1, main="Wiener process")
-lines(x=xx, y=Wiener.Mean)
-lines(x=xx, y=Wiener.SD, lty=2)
+matplot(x=xx, y=BM.mat, xlab="", ylab="", type="l", col=gray(.7), lty=1, main="Brownian Motions")
+lines(x=xx, y=BM.Mean)
+lines(x=xx, y=BM.SD, lty=2)
 legend("topleft", lty = c(1,2), legend = c("Sample Mean","Sample SD"))
-matplot(x=xx, y=Wiener.mat, xlab="", ylab="", type="l", col=gray(.7), lty=1, main="Wiener process")
+matplot(x=xx, y=BM.mat, xlab="", ylab="", type="l", col=gray(.7), lty=1, main="Brownian Motion")
 lines(x=c(0,1), y=c(0,0), lty=1)
 lines(x=c(0,1), y=c(0,sqrt(J*(1/100)^2)), lty=2)
 legend("topleft", lty = c(1,2), legend = c("True Mean","True SD"))
@@ -253,15 +253,15 @@ $$
 
 **Pointwise covariance function:** 
 ```{r, eval=FALSE, echo=TRUE}
-Wiener.Cov <- var(Wiener.mat)
+BM.Cov <- var(BM.mat)
 ```
 
 
 ```{r, echo=FALSE, fig.align='center', out.width="100%"}
-Wiener.cov <- var(t(Wiener.mat))
-slct <- c(seq.int(1,500,by=20),500)
+BM.cov <- var(t(BM.mat))
+slct   <- c(seq.int(1,500,by=20),500)
 par(mfrow=c(1,2), mar=c(1, 1.1, 1.2, 1.1))
-persp(xx[slct], xx[slct], Wiener.cov[slct,slct], xlab="s", ylab="t", zlab="",main="Sample Covariance Function",
+persp(xx[slct], xx[slct], BM.cov[slct,slct], xlab="s", ylab="t", zlab="",main="Sample Covariance Function",
       theta = -40, phi = 20, expand = .75, col = "blue", shade = 1.05)
 x <- seq(0, 1, length= 30); y <- x
 f <- function(x, y){min(x,y)}
@@ -285,15 +285,15 @@ par(mfrow=c(1,1), mar=c(5.1, 4.1, 4.1, 2.1))
 
 ## Principal Component Functions
 
-- **Idea:** Use the Estimated Functional Principal Components (EFPC's)  $\hat{v}_j$ as basis functions for representing the centered functions $X_i-\bar{X}_n$:
+- **Idea:** Use the Estimated Functional Principal Components (EFPC's) $\hat{v}_j$ as <span style="color:#FF4136">**basis functions**</span> for $X_i$:
 $$
-X_i(t)-\bar{X}_n(t)\approx\sum_{j=1}^p\hat{\xi}_{ij}\hat{v}_j(t)
+X_i(t)\approx\bar{X}_n(t) + \sum_{j=1}^p\hat{\xi}_{ij}\hat{v}_j(t)
 $$
 
-- Estimated scores: $\hat{\xi}_{ij}=\int_a^b (X_i(t)-\bar{X}_n(t))\hat{v}_j(t)dt$
-- EFPC's are **orthonormal**, i.e.
+- <span style="color:#FF4136">**Estimated scores**</span>: $\hat{\xi}_{ij}=\int_a^b (X_i(t)-\bar{X}_n(t))\hat{v}_j(t)dt$
+- EFPC's $\hat{v}_j$ are <span style="color:#FF4136">**orthonormal**</span>, i.e.
 $$\textstyle\int_a^b\hat{v}_j(t)\hat{v}_k(t)dt=\begin{cases}1, &j=k\\0,&j\neq k.\end{cases}$$
-
+- <span style="color:#FF4136">**Best basis property**</span>
 
 ## Principal Component Functions 
 
@@ -306,18 +306,13 @@ $$
 where $\hat{\lambda}_1>\dots >\hat{\lambda}_p$ denote the estimated eigenvalues.
 ```{r echo=FALSE, fig.align='center', fig.height=3}
 BSPL.basis <- create.bspline.basis(rangeval=c(0,1), nbasis=200)
-Wiener.fd  <- smooth.basis(argvals=xx, y=Wiener.mat, fdParobj=BSPL.basis)
-# Wiener.pca <- pca.fd(Wiener.fd$fd, nharm=4)
-# round(Wiener.pca$varprop,2)
-# plot(Wiener.pca$harmonics, lwd=3, ylab="", main="Estimated FPC's")
-
-
-Wiener.pca <- pca.fd(Wiener.fd$fd, nharm=3)
+BM.fd      <- smooth.basis(argvals=xx, y=BM.mat, fdParobj=BSPL.basis)
+BM.pca     <- pca.fd(BM.fd$fd, nharm=3)
 par(mfrow=c(1,3), mar=c(2.1, 1.1, 4.1, 1.1))
-persp(xx[slct], xx[slct], Wiener.cov[slct,slct], xlab="s", ylab="t", zlab="",
+persp(xx[slct], xx[slct], BM.cov[slct,slct], xlab="s", ylab="t", zlab="",
       main="Sample Covariance Function", theta = -40, phi = 20, expand = .75, col = "blue", shade = 1.05)
-invisible(plot(Wiener.pca$values[1:3], type="o", ylab="", main="Estimated Eigenvalues (p=3)"))
-invisible(plot(Wiener.pca$harmonics, lwd=3, ylab="", main="Estimated FPC's (p=3)"))
+invisible(plot(BM.pca$values[1:3], type="o", ylab="", main="Estimated Eigenvalues (p=3)"))
+invisible(plot(BM.pca$harmonics, lwd=3, ylab="", main="Estimated FPC's (p=3)"))
 par(mfrow=c(1,1))
 ```
 
@@ -333,16 +328,16 @@ X_i(t)&\approx\bar{X}_n(t) + \sum_{j=1}^p\hat{\xi}_{ij}\hat{v}_j(t)
 \end{align}
 $$
 ```{r echo=TRUE, echo=FALSE, fig.align='center', fig.height=4}
-Wiener.pca <- pca.fd(Wiener.fd$fd, nharm=15)
-v_hat_mat  <- eval.fd(xx, Wiener.pca$harmonics)
-xi_hat_mat <- Wiener.pca$scores
+BM.pca <- pca.fd(BM.fd$fd, nharm=15)
+v_hat_mat  <- eval.fd(xx, BM.pca$harmonics)
+xi_hat_mat <- BM.pca$scores
 
 # FPCA-approx
-X_fpca_fit <- Wiener.Mean + (xi_hat_mat %*% t(v_hat_mat)) 
+X_fpca_fit <- BM.Mean + (xi_hat_mat %*% t(v_hat_mat)) 
 
 # plot
 par(mfrow=c(1,1), mar=c(5.1, 4.1, 2.1, 2.1))
-invisible(plot(Wiener.fd$fd[1], lwd=1.3, main="Approximation of Brownian Motion (p=15)"))
+invisible(plot(BM.fd$fd[1], lwd=1.3, main="Approximation of Brownian Motion (p=15)"))
 lines(y=X_fpca_fit[1,], x=xx, col="red", lwd=1.3)
 legend("topright", lty = c(1,1), col=c("black","red"), legend = c("True","Approx"))
 ```
@@ -379,8 +374,7 @@ $$R_i(t):=\log(P_i(t))-\log(P_i(0))\approx\frac{P_i(t)-P_i(0)}{P_i(0)}$$
 # Data
 # BOA        <- read.csv(file = "https://raw.githubusercontent.com/lidom/Teaching_Repo/master/stock_prices.csv",
 #                        header = TRUE, sep = " ", dec = ",")
-BOA        <- read.csv(file = "stock_prices.csv",
-                       header = TRUE, sep = " ", dec = ",")
+BOA        <- read.csv(file = "stock_prices.csv", header = TRUE, sep = " ", dec = ",")
 Dates      <- BOA$date
 BOA        <- BOA[,-1]
 BOA        <- data.matrix(BOA)
@@ -433,7 +427,7 @@ invisible(plot.fd(muhat,add=TRUE))
 ## Case Study: BOA Stock Returns
 ```{r echo=FALSE, fig.cap="EFPC's of BOA cumulative returns versus the theoretical eigenfunctions of Brownian Motions.", fig.align='center'}
 log_BOA_fpca  <- pca.fd(log_BOA_fd, nharm=4)
-# Eigenfunctions of Wiener process
+# Eigenfunctions of BM process
 efwp_fun      <- function(x, k=1){sqrt(2)*sin((k-1/2)*pi*x)}
 # integrate(function(x){(efwp_fun(x,k=1))^2}, lower = 0, upper = 1)
 EFWP_mat      <- cbind(efwp_fun(x=xx,k=1), efwp_fun(x=xx,k=2), efwp_fun(x=xx,k=3), efwp_fun(x=xx,k=4))
@@ -441,7 +435,7 @@ EFWP_mat      <- cbind(efwp_fun(x=xx,k=1), efwp_fun(x=xx,k=2), efwp_fun(x=xx,k=3
 par(mfrow=c(1,2))
 invisible(plot(log_BOA_fpca$harmonics, main="Estimated Eigenfunctions of\nCumulative Return Functions",
                xlab="Trading Hours", ylab=""))
-matplot(x = xx, y=EFWP_mat, type="l",  main="True Eigenfunctions of\nWiener Process",ylab="",xlab="")
+matplot(x = xx, y=EFWP_mat, type="l",  main="True Eigenfunctions of\nBrownian Motion",ylab="",xlab="")
 ```
 
 
@@ -466,7 +460,7 @@ $$
 $$
 - Square integrable functions form a <span style="color:#FF4136">**vector space**</span>, i.e., for $c,d\in\mathbb{R}$: 
 $$g,f\in L^2([a,b])\quad\Rightarrow\quad cf+dg\in L^2([a,b]),$$ 
-where <br>
+where addition is pointwise, i.e. <br>
 $(cf+dg)(t)=cf(t)+dg(t)$ for *almost all* $t\in[0,1]$. 
 <br><br>
 (We will ignore measure-theoretic considerations.)
@@ -476,19 +470,19 @@ $(cf+dg)(t)=cf(t)+dg(t)$ for *almost all* $t\in[0,1]$.
 
 What makes the space $L^2([a,b])$ so convenient is its structure:
 
-- <span style="color:#FF4136">**Inner product**</span> of two functions by
+- <span style="color:#FF4136">**Inner product**</span> of two functions is given by
 $$
-\textstyle\langle f,g\rangle=\int_a^bf(t)g(t)dt.
+\textstyle\langle f,g\rangle=\int_a^bf(t)g(t)dt
 $$
 -  Two functions $f$ and $g$ are <span style="color:#FF4136">**orthogonal**</span> if 
-$$\langle f,g\rangle=0.$$
+$$\langle f,g\rangle=0$$
 
 - The <span style="color:#FF4136">**norm**</span> $||f||=\sqrt{\langle f,f\rangle}$, gives us a notion for the distance between two functions: $$d(f,g)=||f-g||$$
 
 
 ##  Square Integrable Functions 
 
-As we have already seen, basis expansions play an important role in
+As we have already seen, <span style="color:#FF4136">**basis expansions**</span> play an important role in
 methodology for functional data. 
 
 - We say that a set of functions $\{e_1 ,e_2,e_3,\dots\}$
@@ -518,10 +512,10 @@ Let $X$ denote a <span style="color:#FF4136">**random function**</span> defined 
 $\Omega$.
 
 
-- We assume that *all* realizations $X(\omega)$, $\omega\in\Omega$, are elements of the space $L^2([a,b])$ of square integrable functions, i.e <br><br>
+- We assume that *all* <span style="color:#FF4136">**realizations**</span> $X(\omega)$, $\omega\in\Omega$, are elements of the space $L^2([a,b])$ of square integrable functions, i.e <br><br>
 $||X(\omega)||=\sqrt{\int_a^b \big(X(\omega)(t)\big)^2dt} < \infty$ for all $\omega\in\Omega$.
 
-- $||X||\in\mathbb{R}$ is thus a real random variable. 
+- $||X||\in\mathbb{R}$ is thus a <span style="color:#FF4136">**real random variable**</span>. 
 
 - If $E(||X||^2)<\infty$, we say that the <span style="color:#FF4136">**random function $X$ is square integrable**</span>. 
 **Caution:** Integration is here with respect to $\omega$, not $t$. It might be more pedagogical to say that the **random function $X$ has a finite second moment**. 
@@ -529,40 +523,40 @@ $||X(\omega)||=\sqrt{\int_a^b \big(X(\omega)(t)\big)^2dt} < \infty$ for all $\om
 
 ## Random Functions
 
-- **Mean function:**
+- <span style="color:#FF4136">**Mean function:**</span>
 $$
 \mu(t)=E(X(t))
 $$
-- **Covariance function:**
+- <span style="color:#FF4136">**Covariance function:**</span>
 $$
 c(t,s)=E\Big((X(t)-\mu(t))(X(s)-\mu(s))\Big)
 $$
-The sample functions $\hat{\mu}_n(t)=\bar{X}_n(t)$ and $\hat{c}_n(t,s)$ are viewed as estimators of the population parameters $\mu(t)$ and $c(t,s)$.
+- The sample mean function $\bar{X}_n(t)$ and the sample covariance function $\hat{c}_n(t,s)$ are viewed as <span style="color:#FF4136">**estimators**</span> of the population parameters $\mu(t)$ and $c(t,s)$.
 
 
 ## Random Functions 
 
-The covariance function leads to **Functional Principal Component Analysis** (FPCA), which allows us to represent a square integrable random function $X$ as
+The population covariance function leads to <span style="color:#FF4136">**Functional Principal Component Analysis (FPCA)**</span>, which allows us to represent a square integrable random function $X$ as:
 $$
-\textstyle X(t)=\mu(t)+\sum_{j=1}^\infty\xi_j v_j(t),
+\textstyle X(t)=\mu(t)+\sum_{j=1}^\infty\xi_j v_j(t)
 $$
 
-- The **eigenfunctions** $v_j$ are the solutions of the eigen-equation
+- The <span style="color:#FF4136">**eigenfunctions**</span> $v_j$ are the solutions of the eigen-equation
 $\int_a^bc(t,s)v_j(s)ds=\lambda_jv_j(t)$. 
 
-- $\lambda_1,\lambda_2,\dots$ denote the **eigenvalues**. 
+- $\lambda_1\geq\lambda_2\geq\dots$ denote the <span style="color:#FF4136">**eigenvalues**</span>. 
 
-- The *random variables* $\xi_j$ are called the **scores**
+- The *random variables* $\xi_j$ are called the <span style="color:#FF4136">**scores**</span>
 $$
-\textstyle \xi_j=\langle X-\mu,v_j\rangle=\int_a^b(X(t)-\mu(t))v_j(t)dt. 
+\textstyle \xi_j=\langle X-\mu,v_j\rangle=\int_a^b(X(t)-\mu(t))v_j(t)dt 
 $$
 <!-- - Typically, the eigenvalues, and so the corresponding eigenfunctions $v_j$ are arranged in nonincreasing order: $\lambda_1 \geq \lambda_2 \geq\dots$.  -->
 
 ## Random Functions 
 
-FPCA allows us to represent a square integrable random function $X$ as (Karhunen-Loéve expansion)
+<span style="color:#FF4136">**FPCA**</span> allows us to represent a square integrable random function $X$ as (<span style="color:#FF4136">**Karhunen-Loéve expansion**</span>):
 $$
-\textstyle X(t)=\mu(t)+\sum_{j=1}^\infty\xi_j v_j(t).
+\textstyle X(t)=\mu(t)+\sum_{j=1}^\infty\xi_j v_j(t)
 $$
 
 It can be shown that:
@@ -571,7 +565,7 @@ E(\xi_j)=0,\quad V(\xi_j)=\lambda_j,\quad \operatorname{Cov}(\xi_j,\xi_k)=0,\,j\
 $$
 and $E\int_a^b(X(t)-\mu(t))^2dt=E||X-\mu||^2=\sum_{j=1}^\infty\lambda_j$.
 
-That is, $\lambda_j$ is the variance of the random function $X$ **in the principal direction** $v_j$ and the sum of these variances is the **total variance** of $X$. 
+That is, $\lambda_j$ is the variance of the random function $X$ <span style="color:#FF4136">**in the principal direction**</span> $v_j$ and the sum of these variances is the <span style="color:#FF4136">**total variance**</span> of $X$. 
 
 
 ##
@@ -629,29 +623,31 @@ $$
 <!-- \textstyle R(\boldsymbol{\beta})=E(Y-\sum_{r=1}^p\beta_rX_r)^2. -->
 <!-- $$ -->
 <!-- Equating the partial derivatives $\partial R(\boldsymbol{\beta})/\partial\beta_\ell$ to zero for $\ell=1,\dots,p$ leads to the solution -->
-**Normal equations and solution (population):**
+**Normal equations and solutions (population & sample):**
 $$
-\textstyle \mathbf{C}_{XY}=\mathbf{C}_{XX}\boldsymbol{\beta}\quad\Rightarrow\quad  \boldsymbol{\beta}=\mathbf{C}_{XX}^{-1}\mathbf{C}_{XY},
+\textstyle \mathbf{C}_{XY}=\mathbf{C}_{XX}\boldsymbol{\beta}\quad\Rightarrow\quad  \boldsymbol{\beta}=\mathbf{C}_{XX}^{-1}\mathbf{C}_{XY}
 $$
-where<br>
-$\mathbf{C}_{XX}=[E(X_rX_\ell),\,1\leq r,\ell\leq p]$ and $\mathbf{C}_{XY}=[E(X_rY),\,1\leq r\leq p]$.
+$$
+\textstyle \widehat{\mathbf{C}}_{XY}=\widehat{\mathbf{C}}_{XX}\widehat{\boldsymbol{\beta}}_n\quad\Rightarrow\quad
+\widehat{\boldsymbol{\beta}}_n=\widehat{\mathbf{C}}_{XX}^{-1}\widehat{\mathbf{C}}_{XY}
+$$
+where <br>
+$[\mathbf{C}_{XX}]_{r,\ell}=E(X_rX_\ell)$, <br>
+$[\mathbf{C}_{XY}]_r=E(X_rY)$, <br>
+$\big[\widehat{\mathbf{C}}_{XX}\big]_{r,\ell}=\frac{1}{n}\sum_{i=1}^n X_{ir}X_{i\ell}$, and <br> 
+$\big[\widehat{\mathbf{C}}_{XY}\big]_r=\frac{1}{n}\sum_{i=1}^n X_{ir}Y_{i}$.
 
 
 ## Difficulties in Functional Regression
 
-**Remember: The usual regression model**
-
-<!-- **Solution (population):** -->
-<!-- $$ -->
-<!-- \textstyle \boldsymbol{\beta}=\mathbf{C}_X^{-1}\mathbf{C}_{XY}. -->
-<!-- $$ -->
-**Normal equations and solution (sample):**
+**Normal equations and solutions (population & sample):**
 $$
-\textstyle \widehat{\mathbf{C}}_{XY}=\widehat{\mathbf{C}}_{XX}\widehat{\boldsymbol{\beta}}_n\quad\Rightarrow\quad
-\widehat{\boldsymbol{\beta}}_n=\widehat{\mathbf{C}}_{XX}^{-1}\widehat{\mathbf{C}}_{XY},
+\begin{align}
+\textstyle \mathbf{C}_{XY}=\mathbf{C}_{XX}\boldsymbol{\beta}\quad&\Rightarrow\quad  \boldsymbol{\beta}=\mathbf{C}_{XX}^{-1}\mathbf{C}_{XY}\\
+\textstyle \widehat{\mathbf{C}}_{XY}=\widehat{\mathbf{C}}_{XX}\widehat{\boldsymbol{\beta}}_n\quad&\Rightarrow\quad
+\widehat{\boldsymbol{\beta}}_n=\widehat{\mathbf{C}}_{XX}^{-1}\widehat{\mathbf{C}}_{XY}
+\end{align}
 $$
-where <br>
-$\big[\widehat{\mathbf{C}}_{XX}\big]_{r,\ell}=\frac{1}{n}\sum_{i=1}^n X_{ir}X_{i\ell}$ and $\big[\widehat{\mathbf{C}}_{XY}\big]_r=\frac{1}{n}\sum_{i=1}^n X_{ir}Y_{i}$.
 
 To obtain $\boldsymbol{\beta}$ and $\widehat{\boldsymbol{\beta}}_n$, we need <span style="color:#FF4136">**invertibility**</span> of the $p\times p$ matrices $\mathbf{C}_{XX}$ and $\widehat{\mathbf{C}}_{XX}$. 
 
@@ -662,18 +658,19 @@ To obtain $\boldsymbol{\beta}$ and $\widehat{\boldsymbol{\beta}}_n$, we need <sp
 $$
 \textstyle Y_i=\int_a^b\beta(t)X_i(t)+\varepsilon_i
 $$
-**Normal equations (population/sample):**
+**Normal equations (population & sample):**
 $$
 \textstyle c_{XY}(t)=\int_a^b c_{XX}(t,s)\beta(s)ds
 $$
 $$
 \textstyle \hat{c}_{XY}(t)=\int_a^b \hat{c}_{XX}(t,s)\beta(s)ds
 $$
-where: <br> 
-$c_{XX}(t,s)=E(X(t)X(s))$<br> 
-$c_{XY}(t)=E(X(t)Y)$<br> 
-$\hat{c}_{XX}(t,s)=\frac{1}{n}\sum_{i=1}^n(X_i(t)X_i(s))$<br>
-$\hat{c}_{XY}(t)=\frac{1}{n}\sum_{i=1}^n(X_i(t)Y_i)$
+where <br>
+$c_{XX}(t,s)=E(X(t)X(s))$, <br>
+$c_{XY}(t)=E(X(t)Y)$, 
+$\hat{c}_{XX}(t,s)=\frac{1}{n}\sum_{i=1}^n(X_i(t)X_i(s))$, and<br>
+$\hat{c}_{XY}(t)=\frac{1}{n}\sum_{i=1}^n(X_i(t)Y_i)$.
+
 
 
 ## Difficulties in Functional Regression 
@@ -690,23 +687,78 @@ $$
 \textstyle \hat{c}_{XY}(t)=\int_a^b \hat{c}_{XX}(t,s)\beta(s)ds
 $$
 
-Problem:
+**Problem:** 
+- Ill-posed inversion problem 
+- Eigenvalues $\approx 0$
 
-- Inverting ... is problematic
+**Classical solutions:** 
+- Ridge regression 
+- Principal component regression
 
-**Classical solutions:** Ridge regression and principal component regression
+
+##
+<div class="red2">
+<div class="centered">
+<bdi style="font-size:350%;"><b>Functional Regression:<br>Estimation Through Basis Expansion</b>
+</bdi>
+</div>
+</div>
 
 
-<!-- **Functional regression** -->
+## Estimation Through Basis Expansion
+
+Let us consider the scalar-on-function model
+$$
+\textstyle Y_i=\alpha + \int_a^b \beta(s)X_i(s)ds+\varepsilon_i,\quad i=1,\dots,n
+$$
+
+Simplest approach: expand $\beta$ using deterministic basis functions (splines, fourier, etc) $$
+\textstyle \beta(t)=\sum_{k=1}^Kc_kB_k(t)
+$$
+
+
+Rewrite the functional regression model into an approximative multivariate reggression problem
 <!-- $$ -->
+<!-- \textstyle \int_a^b\beta(s)X_i(s)ds=\sum_{k=1}^Kc_k\int_a^bB_k(s)X_i(s)ds -->
+<!-- $$ -->
+<!-- $$ -->
+<!-- \textstyle\phantom{\int_a^b\beta}=\sum_{k=1}^Kc_kx_{ik} -->
+<!-- $$ -->
+$$
+\begin{align}
+\int_a^b\beta(s)X_i(s)ds
+&\approx\sum_{k=1}^Kc_k\int_a^bB_k(s)X_i(s)ds\\
+&=\sum_{k=1}^Kc_kx_{ik}
+\end{align}
+$$
+
+
+
+## Estimation Through Basis Expansion
+
+Let us consider the scalar-on-function model
+<!-- $$ -->
+<!-- \textstyle  -->
 <!-- \begin{align} -->
-<!-- Y_i&=\int_a^b\beta(t)X_i(t)+\varepsilon_i\\ -->
-<!-- Y_i&\approx\sum_{j=1}^J\beta_jX_i(t_j)+\varepsilon_i\\ -->
-<!-- \end{align} -->
+<!-- Y_i &=       \alpha + \int_a^b \beta(s)X_i(s)ds+\varepsilon_i\\ -->
+<!-- Y_i &\approx \alpha + \sum_{k=1}^Kc_k x_{ik} +\varepsilon_i -->
 <!-- $$ -->
 
-<!-- <span style="color:#FF4136">**Problem:**</span> Nearly linearly dependent regressors (*colinearity*), due to very strong correlations between $X_i(t_j)$ and $X_i(t_{j'})$:  -->
-<!-- $$\text{cor}(X_t(t_j),X_t(t_{j'}))\to 1\quad\text{as}\quad|t_j-t_{j'}|\to 0$$ -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
