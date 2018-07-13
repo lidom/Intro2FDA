@@ -1008,7 +1008,7 @@ Functional version of the **Nadaraya-Watson** estimator:
 $$
 \widehat{m}(X)=\frac{\sum_{i=1}^n K(h^{-1}d(X,X_i))Y_i}{\sum_{j=1}^nK(h^{-1}d(X,X_j))},
 $$
-where $d$ is a **semi-metric** such as, for instance the FPCA-based semi-metric:
+where $d$ is a **semi-metric** such as, for instance, the FPCA-based semi-metric:
 $$
 \textstyle d(X_i,X_j)=\sqrt{\sum_{k=1}^K(\hat{\xi}_{ik}-\hat{\xi}_{jk})^2}
 $$
@@ -1033,5 +1033,4 @@ plot(x)
 res.pca1 <- fregre.np(x,y,Ker=AKer.tri,metri=semimetric.pca,q=1)
 summary.fregre.fd(res.pca1, draw = FALSE)
 ```
-
 
