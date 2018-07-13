@@ -616,13 +616,8 @@ The above models are just prototypes illustrating the general idea. The main poi
 
 **Remember: The usual regression model**
 $$
-\textstyle Y_i=\sum_{r=1}^p\beta_rX_r+\varepsilon
+\textstyle Y_i=X\boldsymbol{\beta}+\varepsilon
 $$
-<!-- The vector of slope parameters $\boldsymbol{\beta}=(\beta_1,\dots,\beta_p)$ minimizes -->
-<!-- $$ -->
-<!-- \textstyle R(\boldsymbol{\beta})=E(Y-\sum_{r=1}^p\beta_rX_r)^2. -->
-<!-- $$ -->
-<!-- Equating the partial derivatives $\partial R(\boldsymbol{\beta})/\partial\beta_\ell$ to zero for $\ell=1,\dots,p$ leads to the solution -->
 **Normal equations and solutions (population & sample):**
 $$
 \textstyle \mathbf{C}_{XY}=\mathbf{C}_{XX}\boldsymbol{\beta}\quad\Rightarrow\quad  \boldsymbol{\beta}=\mathbf{C}_{XX}^{-1}\mathbf{C}_{XY}
@@ -666,8 +661,8 @@ $$
 \textstyle \hat{c}_{XY}(t)=\int_a^b \hat{c}_{XX}(t,s)\beta(s)ds
 $$
 where <br>
-$c_{XX}(t,s)=E(X(t)X(s))$, <br>
-$c_{XY}(t)=E(X(t)Y)$, 
+$c_{XX}(t,s)=E(X(t)X(s))$, 
+$c_{XY}(t)=E(X(t)Y)$, <br>
 $\hat{c}_{XX}(t,s)=\frac{1}{n}\sum_{i=1}^n(X_i(t)X_i(s))$, and<br>
 $\hat{c}_{XY}(t)=\frac{1}{n}\sum_{i=1}^n(X_i(t)Y_i)$.
 
@@ -688,18 +683,20 @@ $$
 $$
 
 **Problem:** 
+
 - Ill-posed inversion problem 
 - Eigenvalues $\approx 0$
 
 **Classical solutions:** 
-- Ridge regression 
-- Principal component regression
+
+- Schrinkage methods (ridge regression, principal component regression, etc)
 
 
 ##
+<br><br><br>
 <div class="red2">
 <div class="centered">
-<bdi style="font-size:350%;"><b>Functional Regression:<br>Estimation Through Basis Expansion</b>
+<bdi style="font-size:350%;"><b>Estimation Through Basis Expansion</b>
 </bdi>
 </div>
 </div>
@@ -712,23 +709,18 @@ $$
 \textstyle Y_i=\alpha + \int_a^b \beta(s)X_i(s)ds+\varepsilon_i,\quad i=1,\dots,n
 $$
 
-Simplest approach: expand $\beta$ using deterministic basis functions (splines, fourier, etc) $$
+Simplest approach: Expand $\beta$ using deterministic basis functions (splines, fourier, etc) $$
 \textstyle \beta(t)=\sum_{k=1}^Kc_kB_k(t)
 $$
 
 
-Rewrite the functional regression model into an approximative multivariate reggression problem
-<!-- $$ -->
-<!-- \textstyle \int_a^b\beta(s)X_i(s)ds=\sum_{k=1}^Kc_k\int_a^bB_k(s)X_i(s)ds -->
-<!-- $$ -->
-<!-- $$ -->
-<!-- \textstyle\phantom{\int_a^b\beta}=\sum_{k=1}^Kc_kx_{ik} -->
-<!-- $$ -->
+Rewriting: 
+<!-- the functional regression model into an approximative multivariate reggression problem -->
 $$
 \begin{align}
-\int_a^b\beta(s)X_i(s)ds
-&\approx\sum_{k=1}^Kc_k\int_a^bB_k(s)X_i(s)ds\\
-&=\sum_{k=1}^Kc_kx_{ik}
+\textstyle\int_a^b\beta(s)X_i(s)ds
+&\textstyle =\sum_{k=1}^Kc_k\underbrace{\int_a^bB_k(s)X_i(s)ds}_{=x_{ik}}
+%&\textstyle =\sum_{k=1}^Kc_k
 \end{align}
 $$
 
@@ -736,31 +728,264 @@ $$
 
 ## Estimation Through Basis Expansion
 
-Let us consider the scalar-on-function model
-<!-- $$ -->
-<!-- \textstyle  -->
-<!-- \begin{align} -->
-<!-- Y_i &=       \alpha + \int_a^b \beta(s)X_i(s)ds+\varepsilon_i\\ -->
-<!-- Y_i &\approx \alpha + \sum_{k=1}^Kc_k x_{ik} +\varepsilon_i -->
-<!-- $$ -->
+<!-- This reduces the the scalar-on-function model to a classical regression model: -->
+$$
+\begin{align}
+\textstyle Y_i        &\textstyle =       \alpha + \int_a^b \beta(s)X_i(s)ds  +\varepsilon_i\\
+\textstyle Y_i        &\textstyle = \alpha + \sum_{k=1}^Kc_k x_{ik}     +\varepsilon_i\\
+\textstyle \mathbf{Y} &\textstyle = \mathbf{X}\mathbf{c}+\varepsilon_i,\quad\quad
+\end{align}
+$$
+
+The estimator of the parameter vector $\mathbf{c}=(\alpha,c_1,\dots,c_{K})'$ 
+$$
+\textstyle \hat{\mathbf{c}}=(\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbf{Y},
+$$
+leads to an estimator of the parameter function $\beta(t)$
+$$
+\textstyle \widehat{\beta}(t)=\sum_{k=1}^K\hat{c}_kB_k(t).
+$$
+
+
+## Estimation Through Basis Expansion
+
+**Biased** estimation due to the **truncation error:** $\delta_K(t)$
+$$
+\begin{align}
+\textstyle\beta(t)
+&\textstyle =\sum_{k=1}^\infty c_k B_k(t)\\
+&\textstyle =\sum_{k=1}^K c_k B_k(t) + \underbrace{\sum_{\ell=K+1}^\infty c_\ell B_\ell(t)}_{=\delta_K(t)}
+\end{align}
+$$
+
+It can be shown that (see pp. 55-56 of the accompanying textbook):
+$$
+\textstyle\hat{\mathbf{c}}=\mathbf{c}+(\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\boldsymbol{\delta}_K+(\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\boldsymbol{\varepsilon},
+$$
+where $[\boldsymbol{\delta}_K]_i=\int_a^b\delta_K(s)X_i(s)ds$.
 
 
 
+##
+<br><br><br>
+<div class="red2">
+<div class="centered">
+<bdi style="font-size:350%;"><b>Estimation with a Roughness Penalty</b>
+</bdi>
+</div>
+</div>
+
+## Estimation with a Roughness Penalty
+
+$$
+\begin{align}
+\textstyle P_{\lambda}(\alpha,\beta)=
+&\textstyle \sum_{i=1}^n\Big(Y_i-\alpha-\int_a^b\beta(s)X_i(s)ds\Big)^2\\
+&\textstyle +\lambda\int_a^b\big[(L\beta)(s)\big]^2ds
+\end{align}
+$$
+
+**Idea:** 
+
+- Use (again) the expansion $\beta(s)=\sum_{k=^K}c_kB_k(t)$, but with a very high $K\gg 0$.
+- Regularization is controlled by $\lambda$ and $L$. <br>
+  Usually: $(L\beta)(s)=\beta''(s)$.
+
+It can be shown that (see pp. 56-57 of the accompanying textbook):
+$$
+\textstyle \mathbf{c}_{\lambda}=(\mathbf{X}'\mathbf{X}+\lambda \mathbf{R})^{-1}\mathbf{X}'\mathbf{Y}.
+$$
+
+
+## Estimation with a roughness penalty
+
+Continued:
+
+$$
+\textstyle \mathbf{c}_{\lambda,K}=(\mathbf{X}'\mathbf{X}+\lambda \mathbf{R})^{-1}\mathbf{X}'\mathbf{Y}
+$$
+where
+$$
+\mathbf{R}=
+\left(\begin{matrix}
+0      &0     &\dots &0     \\
+0      &R_{11}&\dots &R_{1K}\\
+0      &R_{21}&\dots &R_{2K}\\
+\vdots &\vdots&\vdots&\vdots\\
+0      &R_{K1}&\dots &R_{KK}\\
+\end{matrix}\right)
+$$
+with $R_{rk}=\int_a^b(LB_r)(s)(LB_k)(s)ds$.
+
+
+##
+<br><br><br><br>
+<div class="red2">
+<div class="centered">
+<bdi style="font-size:350%;"><b>Regression on FPCs</b>
+</bdi>
+</div>
+</div>
+
+
+## Regression on FPCs
+
+$$
+\begin{align}
+\textstyle Y_i        &\textstyle =       \alpha + \int_a^b \beta(s)X_i(s)ds +\varepsilon_i\\
+\textstyle Y_i        &\textstyle =       \alpha + \int_a^b \beta(s)\big(\hat{\mu}(s)+\sum_{j=1}^p\hat{\xi}_{ij}\hat{v}_j(s)\big)ds      +\varepsilon_i\\
+\textstyle Y_i        &\textstyle =\beta_0+\sum_{j=1}^p\beta_j\hat{\xi}_{ij} +\varepsilon_i,
+\end{align}
+$$
+where 
+$$\textstyle\beta_0=\alpha+\int_a^b\beta(s)\hat{\mu}(s)ds$$ 
+and 
+$$\textstyle\beta_j=\int_a^b\beta(s)\hat{v}_j(s)ds$$
+are treated as unknown parameters. 
 
 
 
+## Regression on FPCs
+
+The parameter vector $\mathbf{\beta}=(\beta_0,\beta_1,\dots,\beta_p)'$ can be estimated by (see page 59 of the accompanying textbook)
+$$
+\textstyle\mathbf{\beta}=(\mathbb{X}'\mathbb{X})^{-1}\mathbb{X}'Y
+$$
+
+where
+$$
+\mathbb{X}=
+\left(\begin{matrix}
+1     &\hat{\xi}_{11}&\dots &\hat{\xi}_{1K}\\
+\vdots&\vdots        &\vdots&\vdots        \\
+1     &\hat{\xi}_{K1}&\dots &\hat{\xi}_{KK}\\
+\end{matrix}\right)
+$$
 
 
 
+## Regression on FPCs
+
+The parameter vector $\mathbf{\beta}=(\beta_0,\beta_1,\dots,\beta_p)'$ can be estimated by (see page 59 of the accompanying textbook)
+$$
+\textstyle\mathbf{\beta}=(\mathbb{X}'\mathbb{X})^{-1}\mathbb{X}'Y
+$$
+
+The estimators $\hat\beta_0,\hat\beta_1,\dots,\hat\beta_p$ lead to the estimators 
+$$\textstyle \hat{\beta}(t)=\sum_{j=1}^p\beta_j\hat{v}_j(t)$$
+and
+$$\textstyle \hat{\alpha}  =\hat\beta_0-\sum_{j=1}^p\beta_j\int_a^b\hat{v}_j(s)\hat\mu(s)ds$$
+of our actual interest.
 
 
 
+##
+<br><br><br>
+<div class="red2">
+<div class="centered">
+<bdi style="font-size:350%;"><b>Functional Regression:<br>Hands On</b>
+</bdi>
+</div>
+</div>
+
+
+## Functional Regression: Hands On
+
+```{r, echo=TRUE}
+set.seed(9000)
+n    <- 1000
+grid <- seq(0, 1, length = 101)
+##
+beta <- sin(grid * 2 * pi)
+X    <- matrix(0, nrow=n, ncol=length(grid))
+for(i2 in 1:n){
+ X[i2,] <- X[i2,]+rnorm(length(grid), 0, 1)
+ X[i2,] <- X[i2,]+runif(1, 0, 5)
+ X[i2,] <- X[i2,]+rnorm(1, 1, 0.2)*grid
+ for(j2 in 1:10){
+  e      <- rnorm(2, 0, 1/j2^(2))
+  X[i2,] <- X[i2,]+e[1]*sin((2*pi)*grid*j2)
+  X[i2,] <- X[i2,]+e[2]*cos((2*pi)*grid*j2)
+}}
+## Note the Integral-Approximation using '* .01':
+Y = X %*% beta * .01 + rnorm(n, 0, .4)
+```
+
+
+## Functional Regression: Hands On
+```{r, echo=TRUE}
+matplot(x = grid, y=t(X), type = "l", lty=1)
+```
+
+
+## Functional Regression: Hands On
+
+Estimating with the roughness penalty approach and the FPCA-appoach:
+```{r, echo=TRUE}
+library("refund")
+
+## Roughness Penalty
+fit.RP   <- pfr(Y ~ lf(X, bs = "ps", k = 50))
+
+## FPCA
+fit.FPCA <- pfr(Y ~ fpc(X, pve = 0.99))
+```
 
 
 
+## Functional Regression: Hands On
+
+```{r, echo=FALSE, fig.align="center"}
+suppressMessages(library(ggplot2))
+suppressMessages(library(dplyr))
+suppressMessages(library(reshape2))
+##
+coefs <-  data.frame(grid      = grid, 
+                     FPCA      = coef(fit.FPCA)$value, 
+                     Penalized = coef(fit.RP)$value,
+                     Truth     = beta)
+coefs.m           <- melt(coefs, id = "grid")
+colnames(coefs.m) <- c("grid", "Method", "Value")
+##
+# dev.new(width=6/2,height=3/2)
+ggplot(coefs.m, aes(x=grid,y=Value,color=Method,group=Method), 
+       width=12,height=6) + geom_path() + theme_bw()
+```
 
 
 
+## Functional Regression: Hands On
 
+A more complex $\beta(t)$ function:
+
+```{r, echo=TRUE}
+##
+beta <- -1 * dnorm(grid, mean=.20, sd=.03) + 
+         3 * dnorm(grid, mean=.50, sd=.04) + 
+         1 * dnorm(grid, mean=.75, sd=.05)
+
+## Note the Integral-Approximation using '* .01':
+Y = X %*% beta * .01 + rnorm(n, 0, .4)
+```
+
+
+## Functional Regression: Hands On
+
+```{r, echo=FALSE, fig.align="center"}
+## Roughness Penalty
+fit.RP   <- pfr(Y ~ lf(X, bs = "ps", k = 50))
+## FPCA
+fit.FPCA <- pfr(Y ~ fpc(X, pve = 0.99))
+##
+coefs <-  data.frame(grid      = grid, 
+                     FPCA      = coef(fit.FPCA)$value, 
+                     Penalized = coef(fit.RP)$value,
+                     Truth     = beta)
+coefs.m           <- melt(coefs, id = "grid")
+colnames(coefs.m) <- c("grid", "Method", "Value")
+##
+ggplot(coefs.m, aes(x=grid,y=Value,color=Method,group=Method), 
+       width=12,height=6) + geom_path() + theme_bw()
+```
 
 
