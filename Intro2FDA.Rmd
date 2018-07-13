@@ -29,8 +29,6 @@ FDA_Book_Pic <- png::readPNG("./images/IntroFDA_Book.png")
 grid::grid.raster(FDA_Book_Pic)
 ```
 
-<!-- Covered Chapters: Ch. 1 (1.1-1.4), Ch. ???  -->
-
 
 ## How to Use these Slides
 
@@ -372,8 +370,7 @@ $$R_i(t):=\log(P_i(t))-\log(P_i(0))\approx\frac{P_i(t)-P_i(0)}{P_i(0)}$$
 
 ```{r, echo=FALSE, eval=TRUE}
 # Data
-# BOA        <- read.csv(file = "https://raw.githubusercontent.com/lidom/Teaching_Repo/master/stock_prices.csv",
-#                        header = TRUE, sep = " ", dec = ",")
+#BOA        <- read.csv(file="https://raw.githubusercontent.com/lidom/Teaching_Repo/master/stock_prices.csv", header = TRUE, sep = " ", dec = ",")
 BOA        <- read.csv(file = "stock_prices.csv", header = TRUE, sep = " ", dec = ",")
 Dates      <- BOA$date
 BOA        <- BOA[,-1]
@@ -787,7 +784,7 @@ $$
 
 **Idea:** 
 
-- Use (again) the expansion $\beta(s)=\sum_{k=^K}c_kB_k(t)$, but with a very high $K\gg 0$.
+- Use (again) the expansion $\beta(s)=\sum_{k=1}^K c_kB_k(t)$, but with a very high $K\gg 0$.
 - Regularization is controlled by $\lambda$ and $L$. <br>
   Usually: $(L\beta)(s)=\beta''(s)$.
 
@@ -986,6 +983,55 @@ colnames(coefs.m) <- c("grid", "Method", "Value")
 ##
 ggplot(coefs.m, aes(x=grid,y=Value,color=Method,group=Method), 
        width=12,height=6) + geom_path() + theme_bw()
+```
+
+
+##
+<br><br><br>
+<div class="red2">
+<div class="centered">
+<bdi style="font-size:350%;"><b>Nonparametric Functional Regression</b>
+</bdi>
+</div>
+</div>
+
+
+## Nonparametric Functional Regression
+
+**Nonparametric scalar–on–function regression:**
+$$Y_i=m(X_i)+\varepsilon_i,$$
+where $Y_i\in\mathbb{R}$ and $X_i\in L^2([a,b])$.
+
+
+Functional version of the **Nadaraya-Watson** estimator:
+
+$$
+\widehat{m}(X)=\frac{\sum_{i=1}^n K(h^{-1}d(X,X_i))Y_i}{\sum_{j=1}^nK(h^{-1}d(X,X_j))},
+$$
+where $d$ is a **semi-metric** such as, for instance the FPCA-based semi-metric:
+$$
+\textstyle d(X_i,X_j)=\sqrt{\sum_{k=1}^K(\hat{\xi}_{ik}-\hat{\xi}_{jk})^2}
+$$
+
+
+
+## Nonparametric Functional Regression
+
+```{r, echo=TRUE, fig.align="center"}
+suppressMessages(library("fda.usc")); data(tecator)
+absorp <- tecator$absorp.fdata
+x      <- absorp[1:129,]
+y      <- tecator$y$Fat[1:129]
+```
+```{r, echo=FALSE}
+plot(x)
+```
+
+
+## Nonparametric Functional Regression
+```{r, echo=TRUE, fig.align="center"}
+res.pca1 <- fregre.np(x,y,Ker=AKer.tri,metri=semimetric.pca,q=1)
+summary.fregre.fd(res.pca1, draw = FALSE)
 ```
 
 

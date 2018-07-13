@@ -134,8 +134,7 @@ legend("topright", lty = c(1,1), col=c("black","red"), legend = c("True","Approx
 
 ## ---- echo=FALSE, eval=TRUE----------------------------------------------
 # Data
-# BOA        <- read.csv(file = "https://raw.githubusercontent.com/lidom/Teaching_Repo/master/stock_prices.csv",
-#                        header = TRUE, sep = " ", dec = ",")
+#BOA        <- read.csv(file="https://raw.githubusercontent.com/lidom/Teaching_Repo/master/stock_prices.csv", header = TRUE, sep = " ", dec = ",")
 BOA        <- read.csv(file = "stock_prices.csv", header = TRUE, sep = " ", dec = ",")
 Dates      <- BOA$date
 BOA        <- BOA[,-1]
@@ -262,4 +261,17 @@ colnames(coefs.m) <- c("grid", "Method", "Value")
 ##
 ggplot(coefs.m, aes(x=grid,y=Value,color=Method,group=Method), 
        width=12,height=6) + geom_path() + theme_bw()
+
+## ---- echo=TRUE, fig.align="center"--------------------------------------
+suppressMessages(library("fda.usc")); data(tecator)
+absorp <- tecator$absorp.fdata
+x      <- absorp[1:129,]
+y      <- tecator$y$Fat[1:129]
+
+## ---- echo=FALSE---------------------------------------------------------
+plot(x)
+
+## ---- echo=TRUE, fig.align="center"--------------------------------------
+res.pca1 <- fregre.np(x,y,Ker=AKer.tri,metri=semimetric.pca,q=1)
+summary.fregre.fd(res.pca1, draw = FALSE)
 
