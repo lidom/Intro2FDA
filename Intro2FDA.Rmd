@@ -1,7 +1,6 @@
 ---
 title: "A Gentle Introduction to Functional Data Analysis"
 author: "Dominik Liebl"
-date: "13 Juli 2018"
 output:
   ioslides_presentation: default
   slidy_presentation: default
